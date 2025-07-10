@@ -424,8 +424,9 @@ dijkstra(graph, 'A');`;
     
     while (pq.length > 0) {
       pq.sort((a, b) => a.dist - b.dist);
-      const currentItem = pq.shift()!;
-      const current = currentItem.node;
+      const next = pq.shift();
+      if (!next) break;
+      const { node: current } = next;
       
       if (visited.has(current)) continue;
       visited.add(current);
@@ -590,8 +591,8 @@ dijkstra(graph, 'A');`;
     const adjacencyList = getAdjacencyList();
     const distances: {[key:string]: number} = {};
     const prev: {[key:string]: string|null} = {};
-    const visited = new Set();
-    const pq = [];
+    const visited = new Set<string>();
+    const pq: { node: string; dist: number }[] = [];
     nodes.forEach(node => {
       distances[node.id] = Infinity;
       prev[node.id] = null;
@@ -600,7 +601,9 @@ dijkstra(graph, 'A');`;
     pq.push({ node: startNode, dist: 0 });
     while (pq.length > 0 && isPlayingRef.current) {
       pq.sort((a, b) => a.dist - b.dist);
-      const { node: current } = pq.shift();
+      const next = pq.shift();
+      if (!next) break;
+      const { node: current } = next;
       if (visited.has(current)) continue;
       visited.add(current);
       setNodes(prevNodes => prevNodes.map(n => ({
@@ -609,7 +612,7 @@ dijkstra(graph, 'A');`;
         visited: visited.has(n.id)
       })));
       await sleep(1200);
-      for (const neighbor of adjacencyList[current]) {
+      for (const neighbor of adjacencyList[current] as { to: string; weight: number }[]) {
         const { to, weight } = neighbor;
         if (distances[current] + weight < distances[to]) {
           distances[to] = distances[current] + weight;
