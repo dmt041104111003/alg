@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://shop.pro.vn/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /auth/
+
+# Allow important pages
+Allow: /products
+Allow: /documents
+Allow: /about
+Allow: /contact
+
+# Crawl delay
+Crawl-delay: 1 
